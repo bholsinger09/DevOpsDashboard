@@ -85,6 +85,6 @@ RecurringJob.AddOrUpdate<IServerMonitorService>(
 RecurringJob.AddOrUpdate<IGitHubService>(
     "sync-github-data",
     service => service.SyncGitHubDataAsync(),
-    Cron.Every5Minutes);
+    "*/5 * * * *");
 
 app.Run();

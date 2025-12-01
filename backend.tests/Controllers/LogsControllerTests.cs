@@ -19,7 +19,7 @@ public class LogsControllerTests : IDisposable
     }
 
     [Fact]
-    public async Task GetLogs_FiltersBy LogLevel_WhenLevelProvided()
+    public async Task GetLogs_FiltersByLogLevel_WhenLevelProvided()
     {
         // Arrange
         var logs = new[]

@@ -21,7 +21,7 @@ public class DeploymentsController : ControllerBase
     {
         return await _context.Deployments
             .OrderByDescending(d => d.StartedAt)
-            .Take(limit.Value)
+            .Take(limit ?? 50)
             .ToListAsync();
     }
 

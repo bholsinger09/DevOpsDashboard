@@ -126,7 +126,7 @@ public class GitHubService : IGitHubService
                         Author = pr.User.Login,
                         Url = pr.HtmlUrl,
                         CreatedAt = pr.CreatedAt.UtcDateTime,
-                        UpdatedAt = pr.UpdatedAt?.UtcDateTime,
+                        UpdatedAt = pr.UpdatedAt.UtcDateTime,
                         MergedAt = pr.MergedAt?.UtcDateTime,
                         ClosedAt = pr.ClosedAt?.UtcDateTime,
                         IsMerged = pr.Merged,
@@ -140,7 +140,7 @@ public class GitHubService : IGitHubService
                 else
                 {
                     existingPR.State = pr.State.StringValue;
-                    existingPR.UpdatedAt = pr.UpdatedAt?.UtcDateTime;
+                    existingPR.UpdatedAt = pr.UpdatedAt.UtcDateTime;
                     existingPR.MergedAt = pr.MergedAt?.UtcDateTime;
                     existingPR.ClosedAt = pr.ClosedAt?.UtcDateTime;
                     existingPR.IsMerged = pr.Merged;

@@ -2,6 +2,7 @@ using DevOpsDashboard.API.Data;
 using DevOpsDashboard.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LogLevel = DevOpsDashboard.API.Models.LogLevel;
 
 namespace DevOpsDashboard.API.Controllers;
 
@@ -36,7 +37,7 @@ public class LogsController : ControllerBase
 
         return await query
             .OrderByDescending(l => l.Timestamp)
-            .Take(limit.Value)
+            .Take(limit ?? 100)
             .ToListAsync();
     }
 
