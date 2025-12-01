@@ -14,9 +14,11 @@ app.use((req, res, next) => {
 });
 
 // SPA fallback - serve index.html for all routes
-app.get('/*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'www', 'index.html'));
-});// Start server
+});
+
+// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`DevOps Dashboard running on port ${PORT}`);
