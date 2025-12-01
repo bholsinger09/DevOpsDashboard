@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>GitHub</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="syncGitHub()">
+        <ion-icon slot="icon-only" name="sync"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="issues">
+        <ion-label>Issues</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="prs">
+        <ion-label>Pull Requests</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div [ngSwitch]="segment">
+    <ion-list *ngSwitchCase="'issues'">
+      <ion-item *ngFor="let issue of issues" [href]="issue.url" target="_blank">
+        <ion-label>
+          <h2>#{{ issue.gitHubId }} - {{ issue.title }}</h2>
+          <p>{{ issue.author }} • {{ issue.createdAt | date:'short' }}</p>
+          <ion-note *ngIf="issue.labels">{{ issue.labels }}</ion-note>
+        </ion-label>
+        <ion-badge [color]="getStateColor(issue.state)" slot="end">
+          {{ issue.state }}
+        </ion-badge>
+      </ion-item>
+      <div class="empty-state" *ngIf="issues.length === 0 && !loading">
+        <p>No issues found</p>
+      </div>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'prs'">
+      <ion-item *ngFor="let pr of pullRequests" [href]="pr.url" target="_blank">
+        <ion-label>
+          <h2>#{{ pr.gitHubId }} - {{ pr.title }}</h2>
+          <p>{{ pr.author }} • {{ pr.createdAt | date:'short' }}</p>
+          <ion-note *ngIf="pr.sourceBranch && pr.targetBranch">
+            {{ pr.sourceBranch }} → {{ pr.targetBranch }}
+          </ion-note>
+        </ion-label>
+        <ion-badge [color]="pr.isMerged ? 'success' : getStateColor(pr.state)" slot="end">
+          {{ pr.isMerged ? 'Merged' : pr.state }}
+        </ion-badge>
+      </ion-item>
+      <div class="empty-state" *ngIf="pullRequests.length === 0 && !loading">
+        <p>No pull requests found</p>
+      </div>
+    </ion-list>
+  </div>
+</ion-content>

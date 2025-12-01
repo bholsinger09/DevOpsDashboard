@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Servers</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addServer()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar (ionInput)="filterServers($event)" placeholder="Search servers"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="filteredServers.length > 0">
+    <ion-item-sliding *ngFor="let server of filteredServers">
+      <ion-item>
+        <ion-icon 
+          [name]="getStatusIcon(server.status)" 
+          [color]="getStatusColor(server.status)" 
+          slot="start"
+        ></ion-icon>
+        <ion-label>
+          <h2>{{ server.name }}</h2>
+          <p>{{ server.url }}</p>
+          <p *ngIf="server.description">{{ server.description }}</p>
+          <ion-note>
+            Uptime: {{ server.uptimePercentage }}% | 
+            Response: {{ server.responseTimeMs }}ms
+            <span *ngIf="server.lastChecked"> | Last: {{ server.lastChecked | date:'short' }}</span>
+          </ion-note>
+        </ion-label>
+        <ion-badge [color]="getStatusColor(server.status)" slot="end">
+          {{ server.status }}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteServer(server)">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="empty-state" *ngIf="filteredServers.length === 0">
+    <ion-icon name="server-outline" size="large"></ion-icon>
+    <p>No servers found</p>
+    <ion-button (click)="addServer()">Add Server</ion-button>
+  </div>
+</ion-content>

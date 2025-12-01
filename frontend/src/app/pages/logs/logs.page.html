@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>System Logs</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="filterLevel" (ionChange)="loadLogs()">
+      <ion-segment-button value="">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Error">
+        <ion-label>Error</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Warning">
+        <ion-label>Warning</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Info">
+        <ion-label>Info</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list *ngIf="logs.length > 0">
+    <ion-item *ngFor="let log of logs">
+      <ion-icon 
+        [name]="getLevelIcon(log.level)" 
+        [color]="getLevelColor(log.level)" 
+        slot="start"
+      ></ion-icon>
+      <ion-label>
+        <h2>{{ log.source }}</h2>
+        <p class="log-message">{{ log.message }}</p>
+        <ion-note>{{ log.timestamp | date:'short' }}</ion-note>
+      </ion-label>
+      <ion-badge [color]="getLevelColor(log.level)" slot="end">
+        {{ log.level }}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
+
+  <div class="empty-state" *ngIf="logs.length === 0">
+    <ion-icon name="document-text-outline" size="large"></ion-icon>
+    <p>No logs found</p>
+  </div>
+</ion-content>

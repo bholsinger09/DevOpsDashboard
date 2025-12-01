@@ -1,0 +1,129 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="loadStats()">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="dashboard-container">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <!-- Server Stats -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Servers</ion-card-subtitle>
+          <ion-card-title>{{ serverStats.total || 0 }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-chip [color]="getStatusColor('Online')">
+            <ion-label>{{ serverStats.online || 0 }} Online</ion-label>
+          </ion-chip>
+          <ion-chip [color]="getStatusColor('Offline')">
+            <ion-label>{{ serverStats.offline || 0 }} Offline</ion-label>
+          </ion-chip>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- GitHub Stats -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>GitHub</ion-card-subtitle>
+          <ion-card-title>{{ (githubStats.issues?.open || 0) + (githubStats.pullRequests?.open || 0) }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-chip color="warning">
+            <ion-label>{{ githubStats.issues?.open || 0 }} Issues</ion-label>
+          </ion-chip>
+          <ion-chip color="primary">
+            <ion-label>{{ githubStats.pullRequests?.open || 0 }} PRs</ion-label>
+          </ion-chip>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Deployment Stats -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Deployments</ion-card-subtitle>
+          <ion-card-title>{{ deploymentStats.successRate || 0 }}%</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-chip [color]="getStatusColor('Success')">
+            <ion-label>{{ deploymentStats.successful || 0 }} Success</ion-label>
+          </ion-chip>
+          <ion-chip [color]="getStatusColor('Failed')">
+            <ion-label>{{ deploymentStats.failed || 0 }} Failed</ion-label>
+          </ion-chip>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Log Stats -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Logs</ion-card-subtitle>
+          <ion-card-title>{{ logStats.total || 0 }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-chip [color]="getLogLevelColor('Error')">
+            <ion-label>{{ logStats.error || 0 }} Errors</ion-label>
+          </ion-chip>
+          <ion-chip [color]="getLogLevelColor('Warning')">
+            <ion-label>{{ logStats.warning || 0 }} Warnings</ion-label>
+          </ion-chip>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Recent Deployments -->
+    <ion-card *ngIf="recentDeployments.length > 0">
+      <ion-card-header>
+        <ion-card-title>Recent Deployments</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let deployment of recentDeployments" [routerLink]="['/deployments']">
+            <ion-label>
+              <h2>{{ deployment.environment }} - {{ deployment.version }}</h2>
+              <p>{{ deployment.deployedBy }} • {{ deployment.startedAt | date:'short' }}</p>
+            </ion-label>
+            <ion-badge [color]="getStatusColor(deployment.status)" slot="end">
+              {{ deployment.status }}
+            </ion-badge>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Recent Logs -->
+    <ion-card *ngIf="recentLogs.length > 0">
+      <ion-card-header>
+        <ion-card-title>Recent Logs</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let log of recentLogs" [routerLink]="['/logs']">
+            <ion-label>
+              <h2>{{ log.source }}</h2>
+              <p>{{ log.message }}</p>
+              <p class="log-time">{{ log.timestamp | date:'short' }}</p>
+            </ion-label>
+            <ion-badge [color]="getLogLevelColor(log.level)" slot="end">
+              {{ log.level }}
+            </ion-badge>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
