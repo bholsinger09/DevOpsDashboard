@@ -13,7 +13,7 @@
     "lint": "ng lint",
     "ionic:build": "ng build",
     "ionic:serve": "ng serve",
-    "heroku-postbuild": "npm run build --configuration production"
+    "heroku-postbuild": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
