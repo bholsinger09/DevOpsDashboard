@@ -17,13 +17,13 @@ RUN dotnet publish "DevOpsDashboard.API.csproj" -c Release -o /app/publish /p:Us
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
-EXPOSE 5000
+EXPOSE 5001
 
 # Copy published app
 COPY --from=publish /app/publish .
 
 # Set environment variables
-ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_URLS=http://+:5001
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 ENTRYPOINT ["dotnet", "DevOpsDashboard.API.dll"]

@@ -11,13 +11,35 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
+# Check if Docker daemon is running
+if ! docker info &> /dev/null; then
+    echo "⚠️  Docker Desktop is not running. Starting it now..."
+    open -a Docker
+    echo "⏳ Waiting for Docker to start (this may take 30-60 seconds)..."
+    
+    # Wait for Docker daemon to be ready
+    for i in {1..60}; do
+        if docker info &> /dev/null; then
+            echo "✅ Docker is ready!"
+            break
+        fi
+        if [ $i -eq 60 ]; then
+            echo "❌ Docker failed to start. Please start Docker Desktop manually and try again."
+            exit 1
+        fi
+        sleep 2
+        echo -n "."
+    done
+    echo ""
+fi
+
 # Check if Docker Compose is installed
 if ! command -v docker-compose &> /dev/null; then
     echo "❌ Docker Compose is not installed."
     exit 1
 fi
 
-echo "✅ Docker and Docker Compose are installed"
+echo "✅ Docker and Docker Compose are ready"
 echo ""
 
 # Stop existing containers
