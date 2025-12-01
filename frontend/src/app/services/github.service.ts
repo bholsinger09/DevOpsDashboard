@@ -46,13 +46,13 @@ export class GithubService {
   constructor(private http: HttpClient) {}
 
   getIssues(state?: string): Observable<GitHubIssue[]> {
-    const params = state ? { state } : {};
-    return this.http.get<GitHubIssue[]>(`${this.apiUrl}/issues`, { params });
+    const options = state ? { params: { state } } : {};
+    return this.http.get<GitHubIssue[]>(`${this.apiUrl}/issues`, options);
   }
 
   getPullRequests(state?: string): Observable<GitHubPullRequest[]> {
-    const params = state ? { state } : {};
-    return this.http.get<GitHubPullRequest[]>(`${this.apiUrl}/pullrequests`, { params });
+    const options = state ? { params: { state } } : {};
+    return this.http.get<GitHubPullRequest[]>(`${this.apiUrl}/pullrequests`, options);
   }
 
   syncGitHubData(): Observable<any> {

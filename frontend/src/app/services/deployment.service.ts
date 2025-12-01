@@ -25,8 +25,8 @@ export class DeploymentService {
   constructor(private http: HttpClient) {}
 
   getDeployments(limit?: number): Observable<Deployment[]> {
-    const params = limit ? { limit: limit.toString() } : {};
-    return this.http.get<Deployment[]>(this.apiUrl, { params });
+    const options = limit ? { params: { limit: limit.toString() } } : {};
+    return this.http.get<Deployment[]>(this.apiUrl, options);
   }
 
   getDeployment(id: number): Observable<Deployment> {

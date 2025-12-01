@@ -27,7 +27,8 @@ export class LogService {
     if (source) params.source = source;
     if (limit) params.limit = limit.toString();
     
-    return this.http.get<SystemLog[]>(this.apiUrl, { params });
+    const options = Object.keys(params).length > 0 ? { params } : {};
+    return this.http.get<SystemLog[]>(this.apiUrl, options);
   }
 
   getLog(id: number): Observable<SystemLog> {
