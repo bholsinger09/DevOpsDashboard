@@ -7,19 +7,17 @@ app.use(express.static(path.join(__dirname, 'www')));
 
 // Security headers
 app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  next();
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
 });
 
 // SPA fallback - serve index.html for all routes
-app.get('*', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'www', 'index.html'));
-});
-
-// Start server
+});// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`DevOps Dashboard running on port ${PORT}`);
+    console.log(`DevOps Dashboard running on port ${PORT}`);
 });
