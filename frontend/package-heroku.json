@@ -1,0 +1,14 @@
+{
+  "name": "devops-dashboard-web",
+  "version": "1.0.0",
+  "description": "DevOps Dashboard Frontend",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "ng build --configuration production",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  }
+}
