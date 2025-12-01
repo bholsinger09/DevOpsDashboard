@@ -1,0 +1,13 @@
+**/.dockerignore
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/.idea
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/node_modules
+**/logs
