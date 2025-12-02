@@ -17,7 +17,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("IonicApp", policy =>
     {
-        policy.WithOrigins("http://localhost:8100", "http://localhost:4200")
+        policy.WithOrigins(
+                "http://localhost:8100", 
+                "http://localhost:4200",
+                "http://localhost",
+                "https://devops-dashboard-web-bh-6d15d57a6e10.herokuapp.com")
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
